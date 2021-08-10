@@ -24,19 +24,6 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 //Global variables
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
-let getCurrentLocation = navigator.geolocation.getCurrentPosition(showLocation);
-
-// get cuttent Location and get call to api
-function showLocation(position) {
-  let lat = position.coords.latitude;
-  let lon = position.coords.longitude;
-  axios
-    .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
-    .then(showWeather);
-}
-
-let currentLocation = document.querySelector("#current-location");
-currentLocation.addEventListener("click", showLocation);
 
 // search engine and get call to api
 function changeWeather(event) {
@@ -50,7 +37,7 @@ function changeWeather(event) {
   }
 
   let searchButton = document.querySelector("#search-btn");
-  searchButton.addEventListener("submit", changeWeather);
+  searchButton.addEventListener("click", changeWeather);
 
   // change weather to celsius
   function showCelsius(event) {
@@ -79,6 +66,22 @@ function changeWeather(event) {
   let fahrenheitLink = document.querySelector("#fahrenheit-mode");
   fahrenheitLink.addEventListener("click", showFahrenheit);
 }
+
+// get cuttent Location and get call to api
+function handleLocation() {
+  function showLocation(position) {
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+    axios
+      .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
+      .then(showWeather);
+  }
+  let getCurrentLocation =
+    navigator.geolocation.getCurrentPosition(showLocation);
+}
+
+let currentLocation = document.querySelector("#current-location");
+currentLocation.addEventListener("click", handleLocation);
 
 // get response from api
 function showWeather(response) {
