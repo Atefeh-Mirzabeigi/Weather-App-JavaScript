@@ -84,7 +84,6 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 //if click on the celsius change the temperature to celsius
 //if click on the fahrenheit change the temperature to fahrenheit
 
-let getCurrentLocation = navigator.geolocation.getCurrentPosition(showLocation);
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
 let units = "metric";
@@ -116,26 +115,32 @@ function changeWeather(event) {
     .addEventListener("click", showFahrenheit);
 }
 let searchButton = document.querySelector("#search-btn");
-searchButton.addEventListener("click", changeWeather);
+searchButton.addEventListener("submit", changeWeather);
 
 function showWeather(response) {
-  //console.log(response.data);
+  console.log(response.data);
   let temperature = Math.round(response.data.main.temp);
   let max = Math.round(response.data.main.temp_max);
   let min = Math.round(response.data.main.temp_min);
   let humidity = Math.round(response.data.main.humidity);
   let wind = response.data.wind.speed;
   let status = response.data.weather[0].description;
+  let weatherIcon = response.data.weather[0].icon;
   document.querySelector(".weather-status").innerHTML = status;
   document.querySelector("#temperature").innerHTML = temperature;
   document.querySelector("#current-day-temperature").innerHTML = `${max} |
-    <small> ${min}</small>`;
+  <small> ${min}</small>`;
   document.querySelector("#humidity").innerHTML = `Humidity: ${humidity}%`;
   document.querySelector("#windSpeed").innerHTML = `wind: ${wind} km/h`;
+  document
+    .querySelector("#main-icon")
+    .setAttribute(
+      "src",
+      `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`
+    );
+  document.querySelector("#main-icon").setAttribute("alt", `status`);
 }
 
-let currentLocation = document.querySelector("#current-location");
-currentLocation.addEventListener("click", showLocation);
 function showLocation(position) {
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
@@ -143,3 +148,7 @@ function showLocation(position) {
     .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
     .then(showWeather);
 }
+let currentLocation = document.querySelector("#current-location");
+currentLocation.addEventListener("click", showLocation);
+
+let getCurrentLocation = navigator.geolocation.getCurrentPosition(showLocation);
