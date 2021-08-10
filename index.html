@@ -33,7 +33,7 @@
             <li class="float-left">
               <span id="temperature" class="temperature">25</span>
               <span class="units">
-                <a href="#" id="celsius-mode">°C |</a>
+                <a href="#" class="active" id="celsius-mode">°C |</a>
                 <a href="#" id="fahrenheit-mode">°F</a>
               </span>
             </li>
@@ -136,12 +136,13 @@
             <button
               id="search-btn"
               class="btn btn-outline-success rounded-pill px-4 py-2"
+              autocomplete="off"
             >
               Search
             </button>
           </div>
           <div class="col-md-3 col-sm-12 d-grid mx-auto text-center">
-            <button id="current-location" class="btn btn-outline-primary rounded-pill px-3 py-2">
+            <button id="current-location" autocomplete="off" class="btn btn-outline-primary rounded-pill px-3 py-2">
               Current location
             </button>
           </div>

@@ -24,64 +24,7 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 //Global variables
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
-
-// search engine and get call to api
-function changeWeather(event) {
-  event.preventDefault();
-  let searchValue = document.querySelector("#search-input");
-  if (searchValue.value) {
-    document.querySelector("#city-name").innerHTML = searchValue.value;
-    axios
-      .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
-      .then(showWeather);
-  }
-
-  let searchButton = document.querySelector("#search-btn");
-  searchButton.addEventListener("click", changeWeather);
-
-  // change weather to celsius
-  function showCelsius(event) {
-    event.preventDefault();
-    // axios
-    //   .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
-    //   .then(showWeather);
-    document.querySelector("#temperature").innerHTML = temperature;
-    celsiusLink.classList.add("active");
-    fahrenheitLink.classList.remove("active");
-  }
-  let celsiusLink = document.querySelector("#celsius-mode");
-  celsiusLink.addEventListener("click", showCelsius);
-
-  // change weather to fahrenheit
-  function showFahrenheit(event) {
-    event.preventDefault();
-    // axios
-    //   .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
-    //   .then(showWeather);
-    let fahrenheitTemp = (temperature * 9) / 5 + 32;
-    document.querySelector("#temperature").innerHTML = fahrenheitTemp;
-    celsiusLink.classList.remove("active");
-    fahrenheitLink.classList.add("active");
-  }
-  let fahrenheitLink = document.querySelector("#fahrenheit-mode");
-  fahrenheitLink.addEventListener("click", showFahrenheit);
-}
-
-// get cuttent Location and get call to api
-function handleLocation() {
-  function showLocation(position) {
-    let lat = position.coords.latitude;
-    let lon = position.coords.longitude;
-    axios
-      .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
-      .then(showWeather);
-  }
-  let getCurrentLocation =
-    navigator.geolocation.getCurrentPosition(showLocation);
-}
-
-let currentLocation = document.querySelector("#current-location");
-currentLocation.addEventListener("click", handleLocation);
+let temperature = null;
 
 // get response from api
 function showWeather(response) {
@@ -98,7 +41,7 @@ function showWeather(response) {
   document.querySelector("#current-day-temperature").innerHTML = `${max} |
   <small> ${min}</small>`;
   document.querySelector("#humidity").innerHTML = `Humidity: ${humidity}%`;
-  document.querySelector("#windSpeed").innerHTML = `wind: ${wind}`;
+  document.querySelector("#windSpeed").innerHTML = `wind: ${wind} km/h`;
   document
     .querySelector("#main-icon")
     .setAttribute(
@@ -106,6 +49,65 @@ function showWeather(response) {
       `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`
     );
   document.querySelector("#main-icon").setAttribute("alt", `status`);
+  if (handleLocation) {
+    document.querySelector("#city-name").innerHTML = response.data.name;
+  }
 }
 
-let temperature = null;
+// search engine and get call to api
+function changeWeather(event) {
+  event.preventDefault();
+  let searchValue = document.querySelector("#search-input");
+  if (searchValue.value) {
+    document.querySelector("#city-name").innerHTML = searchValue.value;
+    axios
+      .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
+      .then(showWeather);
+  }
+}
+let searchButton = document.querySelector("#search-btn");
+searchButton.addEventListener("click", changeWeather);
+
+// change weather to celsius
+function showCelsius(event) {
+  event.preventDefault();
+  // axios
+  //   .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
+  //   .then(showWeather);
+  document.querySelector("#temperature").innerHTML = Math.round(temperature);
+  celsiusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
+}
+let celsiusLink = document.querySelector("#celsius-mode");
+celsiusLink.addEventListener("click", showCelsius);
+
+// change weather to fahrenheit
+function showFahrenheit(event) {
+  event.preventDefault();
+  // axios
+  //   .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
+  //   .then(showWeather);
+  let fahrenheitTemp = (temperature * 9) / 5 + 32;
+  document.querySelector("#temperature").innerHTML = Math.round(fahrenheitTemp);
+  celsiusLink.classList.remove("active");
+  fahrenheitLink.classList.add("active");
+}
+let fahrenheitLink = document.querySelector("#fahrenheit-mode");
+fahrenheitLink.addEventListener("click", showFahrenheit);
+
+// get cuttent Location and get call to api
+function handleLocation(event) {
+  event.preventDefault();
+  function showLocation(position) {
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+    axios
+      .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
+      .then(showWeather);
+  }
+  let getCurrentLocation =
+    navigator.geolocation.getCurrentPosition(showLocation);
+}
+
+let currentLocation = document.querySelector("#current-location");
+currentLocation.addEventListener("click", handleLocation);
