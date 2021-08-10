@@ -103,23 +103,32 @@ function changeWeather(event) {
       .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
       .then(showWeather);
   }
-  function showCelsius() {
-    axios
-      .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
-      .then(showWeather);
-    celsiusLink.classList.add("active");
-    fahrenheitLink.classList.remove("active");
+  function showCelsius(event) {
+    event.preventDefault();
+    if (searchValue.value) {
+      axios
+        .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
+        .then(showWeather);
+      celsiusLink.classList.add("active");
+      fahrenheitLink.classList.remove("active");
+    }
   }
   let celsiusLink = document
     .querySelector("#celsius-mode")
     .addEventListener("click", showCelsius);
 
-  function showFahrenheit() {
-    axios
-      .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
-      .then(showWeather);
-    celsiusLink.classList.remove("active");
-    fahrenheitLink.classList.add("active");
+  function showFahrenheit(event) {
+    event.preventDefault();
+    if (searchValue.value) {
+      axios
+        .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
+        .then(showWeather);
+      celsiusLink.classList.remove("active");
+      fahrenheitLink.classList.add("active");
+    } else {
+      document.querySelector("#temperature").innerHTML =
+        (temperature * 9) / 5 + 32;
+    }
   }
   let fahrenheitLink = document
     .querySelector("#fahrenheit-mode")
@@ -130,7 +139,7 @@ searchButton.addEventListener("click", changeWeather);
 
 function showWeather(response) {
   console.log(response.data);
-  let temperature = Math.round(response.data.main.temp);
+  temperature = Math.round(response.data.main.temp);
   let max = Math.round(response.data.main.temp_max);
   let min = Math.round(response.data.main.temp_min);
   let humidity = Math.round(response.data.main.humidity);
@@ -152,6 +161,7 @@ function showWeather(response) {
   document.querySelector("#main-icon").setAttribute("alt", `status`);
 }
 
+let temperature = null;
 function showLocation(position) {
   let lat = position.coords.latitude;
   let lon = position.coords.longitude;
@@ -159,7 +169,7 @@ function showLocation(position) {
     .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
     .then(showWeather);
 }
+let getCurrentLocation = navigator.geolocation.getCurrentPosition(showLocation);
+
 let currentLocation = document.querySelector("#current-location");
 currentLocation.addEventListener("click", showLocation);
-
-let getCurrentLocation = navigator.geolocation.getCurrentPosition(showLocation);
