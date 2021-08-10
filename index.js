@@ -76,9 +76,17 @@ let days = [
   "Friday",
   "Saturday",
 ];
+let minutes = date.getMinutes();
+if (minutes < 10) {
+  minutes = `0${minutes}`;
+}
+let hours = date.getHours();
+if (hours < 10) {
+  hours = `0${hours}`;
+}
 let showDate = (document.querySelector("#current-date").innerHTML = `${
   days[date.getDay()]
-} <small>${date.getHours()}:${date.getMinutes()}</small>`);
+} <small>${hours}:${minutes}</small>`);
 
 // challenge 3 bonus one :))
 //if click on the celsius change the temperature to celsius
@@ -86,7 +94,6 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 
 let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
-let units = "metric";
 function changeWeather(event) {
   event.preventDefault();
   let searchValue = document.querySelector("#search-input");
@@ -100,8 +107,10 @@ function changeWeather(event) {
     axios
       .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
       .then(showWeather);
+    celsiusLink.classList.add("active");
+    fahrenheitLink.classList.remove("active");
   }
-  document
+  let celsiusLink = document
     .querySelector("#celsius-mode")
     .addEventListener("click", showCelsius);
 
@@ -109,13 +118,15 @@ function changeWeather(event) {
     axios
       .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
       .then(showWeather);
+    celsiusLink.classList.remove("active");
+    fahrenheitLink.classList.add("active");
   }
-  document
+  let fahrenheitLink = document
     .querySelector("#fahrenheit-mode")
     .addEventListener("click", showFahrenheit);
 }
 let searchButton = document.querySelector("#search-btn");
-searchButton.addEventListener("submit", changeWeather);
+searchButton.addEventListener("click", changeWeather);
 
 function showWeather(response) {
   console.log(response.data);
@@ -131,7 +142,7 @@ function showWeather(response) {
   document.querySelector("#current-day-temperature").innerHTML = `${max} |
   <small> ${min}</small>`;
   document.querySelector("#humidity").innerHTML = `Humidity: ${humidity}%`;
-  document.querySelector("#windSpeed").innerHTML = `wind: ${wind} km/h`;
+  document.querySelector("#windSpeed").innerHTML = `wind: ${wind}`;
   document
     .querySelector("#main-icon")
     .setAttribute(
