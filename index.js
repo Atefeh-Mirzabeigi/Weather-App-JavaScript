@@ -58,7 +58,7 @@ function displayForecast(response) {
 
 // getForecast from api
 function getForecast(coordinate) {
-  let apiUrl = "http://api.openweathermap.org/data/2.5/";
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
   let apiKey = "5ef18a61953b939c992cce84e77cc561";
   axios
     .get(
@@ -100,7 +100,7 @@ function showWeather(response) {
 // search engine and get call to api
 function changeWeather(event) {
   event.preventDefault();
-  let apiUrl = "http://api.openweathermap.org/data/2.5/";
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
   let apiKey = "5ef18a61953b939c992cce84e77cc561";
   let searchValue = document.querySelector("#search-input");
   if (searchValue.value) {
@@ -117,7 +117,7 @@ searchButton.addEventListener("click", changeWeather);
 
 // get cuttent Location and get call to api
 function handleLocation(event) {
-  let apiUrl = "http://api.openweathermap.org/data/2.5/";
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
   let apiKey = "5ef18a61953b939c992cce84e77cc561";
   event.preventDefault();
   function showLocation(position) {
@@ -125,7 +125,7 @@ function handleLocation(event) {
     let lon = position.coords.longitude;
     axios
       .get(
-        `weather?${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+        `${apiUrl}weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
       )
       .then(showWeather);
   }
