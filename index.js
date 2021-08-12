@@ -21,13 +21,8 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
   days[date.getDay()]
 } <small>${hours}:${minutes}</small>`);
 
-//Global variables
-let apiUrl = "https://api.openweathermap.org/data/2.5/";
-let apiKey = "5ef18a61953b939c992cce84e77cc561";
-
 // forecast section
 function displayForecast(response) {
-  console.log(response.data.daily);
   let forecastElement = document.querySelector("#forecast");
 
   //format the time we get from api
@@ -63,6 +58,8 @@ function displayForecast(response) {
 
 // getForecast from api
 function getForecast(coordinate) {
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
+  let apiKey = "5ef18a61953b939c992cce84e77cc561";
   axios
     .get(
       `${apiUrl}onecall?lat=${coordinate.lat}&lon=${coordinate.lon}&units=metric&appid=${apiKey}`
@@ -72,7 +69,6 @@ function getForecast(coordinate) {
 
 // get response from api
 function showWeather(response) {
-  console.log(response.data);
   let temperature = Math.round(response.data.main.temp);
   let max = Math.round(response.data.main.temp_max);
   let min = Math.round(response.data.main.temp_min);
@@ -102,6 +98,8 @@ function showWeather(response) {
 // search engine and get call to api
 function changeWeather(event) {
   event.preventDefault();
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
+  let apiKey = "5ef18a61953b939c992cce84e77cc561";
   let searchValue = document.querySelector("#search-input");
   if (searchValue.value) {
     document.querySelector("#city-name").innerHTML = searchValue.value;
@@ -117,6 +115,8 @@ searchButton.addEventListener("click", changeWeather);
 
 // get cuttent Location and get call to api
 function handleLocation(event) {
+  let apiUrl = "https://api.openweathermap.org/data/2.5/";
+  let apiKey = "5ef18a61953b939c992cce84e77cc561";
   event.preventDefault();
   function showLocation(position) {
     let lat = position.coords.latitude;
