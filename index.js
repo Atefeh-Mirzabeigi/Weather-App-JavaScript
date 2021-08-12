@@ -78,10 +78,12 @@ function showWeather(response) {
   let weatherIcon = response.data.weather[0].icon;
   document.querySelector(".weather-status").innerHTML = status;
   document.querySelector("#temperature").innerHTML = temperature;
-  document.querySelector("#current-day-temperature").innerHTML = `${max} |
-  <small> ${min}</small>`;
+  document.querySelector("#current-day-temperature").innerHTML = `${max}°c 
+  <small class="min-temp"> ${min}°c</small>`;
   document.querySelector("#humidity").innerHTML = `Humidity: ${humidity}%`;
-  document.querySelector("#windSpeed").innerHTML = `wind: ${wind} km/h`;
+  document.querySelector(
+    "#windSpeed"
+  ).innerHTML = `wind: ${wind} <span class="min-temp">m/h</span>`;
   document
     .querySelector("#main-icon")
     .setAttribute(
