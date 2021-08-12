@@ -30,24 +30,33 @@ let temperature = null;
 function displayForecast(response) {
   console.log(response.data.daily);
   let forecastElement = document.querySelector("#forecast");
-  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  //format the time we get from api
+  function formatTime(dailyTime) {
+    let date = new Date(dailyTime * 1000);
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    return days[date.getDay()];
+  }
+
   let dailyArray = response.data.daily;
   let forecasts = `<div class="row justify-content-center next-days-status">`;
-  days.forEach(function (days) {
-    forecasts =
-      forecasts +
-      `<div class="col text-center">
-    <div class="days-of-week">${days}</div>
+  dailyArray.forEach(function (forecast, index) {
+    if (index < 5) {
+      forecasts =
+        forecasts +
+        `<div class="col text-center">
+    <div class="days-of-week">${formatTime(forecast.dt)}</div>
     <img
-      src="images/2682844_cloud_day_precipitation_rain_snow_icon.png"
+      src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
       class="next-days"
       alt=""
     />
     <div id="forecast-detail" class="days-of-week">
-      29 °c
+      ${Math.round(forecast.temp.max)} °c
       <br />
-      <small>13 °c</small>
+      <small>${Math.round(forecast.temp.min)} °c</small>
       </div> </div>`;
+    }
   });
   forecasts = forecasts + `</div>`;
   forecastElement.innerHTML = forecasts;
