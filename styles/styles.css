@@ -29,6 +29,7 @@ p,
 }
 .current-day-status {
   padding: 0;
+  color: lightgray;
 }
 #city-name {
   font-size: 35px;
@@ -41,28 +42,17 @@ p,
 .units {
   position: relative;
   top: -20px;
-}
-
-.units a {
-  text-decoration: none;
   font-size: 20px;
-  color: lightpink;
-}
-.active {
-  color: red !important;
-  cursor: pointer;
+  color: lightslategray;
 }
 .days-of-week {
   font-size: 18px;
   color: gray;
   margin: 0 0.5rem;
 }
-.day-status {
-  margin-top: 10px;
-}
-.next-days {
-  width: 4rem;
-  margin-left: -0.5rem;
+.min-temp {
+  color: lightslategray;
+  font-size: 15px;
 }
 .search-section {
   padding: 0 2rem;

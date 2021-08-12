@@ -24,7 +24,6 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 //Global variables
 let apiUrl = "https://api.openweathermap.org/data/2.5/";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
-let temperature = null;
 
 // forecast section
 function displayForecast(response) {
@@ -54,7 +53,7 @@ function displayForecast(response) {
     <div id="forecast-detail" class="days-of-week">
       ${Math.round(forecast.temp.max)} °c
       <br />
-      <small>${Math.round(forecast.temp.min)} °c</small>
+      <small class="min-temp">${Math.round(forecast.temp.min)} °c</small>
       </div> </div>`;
     }
   });
@@ -74,7 +73,7 @@ function getForecast(coordinate) {
 // get response from api
 function showWeather(response) {
   console.log(response.data);
-  temperature = Math.round(response.data.main.temp);
+  let temperature = Math.round(response.data.main.temp);
   let max = Math.round(response.data.main.temp_max);
   let min = Math.round(response.data.main.temp_min);
   let humidity = Math.round(response.data.main.humidity);
@@ -115,33 +114,6 @@ function changeWeather(event) {
 }
 let searchButton = document.querySelector("#search-btn");
 searchButton.addEventListener("click", changeWeather);
-
-// change weather to celsius
-function showCelsius(event) {
-  event.preventDefault();
-  // axios
-  //   .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
-  //   .then(showWeather);
-  document.querySelector("#temperature").innerHTML = Math.round(temperature);
-  celsiusLink.classList.add("active");
-  fahrenheitLink.classList.remove("active");
-}
-let celsiusLink = document.querySelector("#celsius-mode");
-celsiusLink.addEventListener("click", showCelsius);
-
-// change weather to fahrenheit
-function showFahrenheit(event) {
-  event.preventDefault();
-  // axios
-  //   .get(`${apiUrl}q=${searchValue.value}&units=imperial&appid=${apiKey}`)
-  //   .then(showWeather);
-  let fahrenheitTemp = (temperature * 9) / 5 + 32;
-  document.querySelector("#temperature").innerHTML = Math.round(fahrenheitTemp);
-  celsiusLink.classList.remove("active");
-  fahrenheitLink.classList.add("active");
-}
-let fahrenheitLink = document.querySelector("#fahrenheit-mode");
-fahrenheitLink.addEventListener("click", showFahrenheit);
 
 // get cuttent Location and get call to api
 function handleLocation(event) {
