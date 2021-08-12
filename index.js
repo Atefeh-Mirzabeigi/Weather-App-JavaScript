@@ -22,9 +22,45 @@ let showDate = (document.querySelector("#current-date").innerHTML = `${
 } <small>${hours}:${minutes}</small>`);
 
 //Global variables
-let apiUrl = "https://api.openweathermap.org/data/2.5/weather?";
+let apiUrl = "https://api.openweathermap.org/data/2.5/";
 let apiKey = "5ef18a61953b939c992cce84e77cc561";
 let temperature = null;
+
+// forecast section
+function displayForecast(response) {
+  console.log(response.data.daily);
+  let forecastElement = document.querySelector("#forecast");
+  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let dailyArray = response.data.daily;
+  let forecasts = `<div class="row justify-content-center next-days-status">`;
+  days.forEach(function (days) {
+    forecasts =
+      forecasts +
+      `<div class="col text-center">
+    <div class="days-of-week">${days}</div>
+    <img
+      src="images/2682844_cloud_day_precipitation_rain_snow_icon.png"
+      class="next-days"
+      alt=""
+    />
+    <div id="forecast-detail" class="days-of-week">
+      29 °c
+      <br />
+      <small>13 °c</small>
+      </div> </div>`;
+  });
+  forecasts = forecasts + `</div>`;
+  forecastElement.innerHTML = forecasts;
+}
+
+// getForecast from api
+function getForecast(coordinate) {
+  axios
+    .get(
+      `${apiUrl}onecall?lat=${coordinate.lat}&lon=${coordinate.lon}&units=metric&appid=${apiKey}`
+    )
+    .then(displayForecast);
+}
 
 // get response from api
 function showWeather(response) {
@@ -52,6 +88,7 @@ function showWeather(response) {
   if (handleLocation) {
     document.querySelector("#city-name").innerHTML = response.data.name;
   }
+  getForecast(response.data.coord);
 }
 
 // search engine and get call to api
@@ -61,7 +98,9 @@ function changeWeather(event) {
   if (searchValue.value) {
     document.querySelector("#city-name").innerHTML = searchValue.value;
     axios
-      .get(`${apiUrl}q=${searchValue.value}&units=metric&appid=${apiKey}`)
+      .get(
+        `${apiUrl}weather?q=${searchValue.value}&units=metric&appid=${apiKey}`
+      )
       .then(showWeather);
   }
 }
@@ -102,7 +141,9 @@ function handleLocation(event) {
     let lat = position.coords.latitude;
     let lon = position.coords.longitude;
     axios
-      .get(`${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)
+      .get(
+        `weather?${apiUrl}lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+      )
       .then(showWeather);
   }
   let getCurrentLocation =
